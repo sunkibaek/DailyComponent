@@ -12,7 +12,7 @@ type IProps = TextInputProperties & {
   labelText: string;
 };
 interface IState {
-  labelMarginBottom: Animated.Value;
+  labelAnimation: Animated.Value;
   text: string;
 }
 
@@ -21,10 +21,11 @@ const styles = StyleSheet.create({
     borderBottomColor: "#727272",
     borderBottomWidth: 1,
     height: 42,
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     paddingBottom: 2
   },
   label: {
+    bottom: 0,
     left: 0,
     position: "absolute"
   },
@@ -36,7 +37,7 @@ class LabelTextInput extends Component<IProps, IState> {
     super(props);
 
     this.state = {
-      labelMarginBottom: new Animated.Value(20),
+      labelAnimation: new Animated.Value(0),
       text: ""
     };
   }
@@ -45,7 +46,20 @@ class LabelTextInput extends Component<IProps, IState> {
     return (
       <View style={styles.container}>
         <Animated.Text
-          style={[{ top: this.state.labelMarginBottom }, human.caption1]}
+          style={[
+            styles.label,
+            human.caption1,
+            {
+              transform: [
+                {
+                  translateY: this.state.labelAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, -20]
+                  })
+                }
+              ]
+            }
+          ]}
         >
           {this.props.labelText}
         </Animated.Text>
@@ -63,9 +77,10 @@ class LabelTextInput extends Component<IProps, IState> {
   }
 
   private moveUpLabel = () => {
-    Animated.timing(this.state.labelMarginBottom, {
-      duration: 300,
-      toValue: 0
+    Animated.timing(this.state.labelAnimation, {
+      duration: 250,
+      toValue: 1,
+      useNativeDriver: true
     }).start();
   };
 
@@ -74,9 +89,10 @@ class LabelTextInput extends Component<IProps, IState> {
       return;
     }
 
-    Animated.timing(this.state.labelMarginBottom, {
-      duration: 300,
-      toValue: 20
+    Animated.timing(this.state.labelAnimation, {
+      duration: 250,
+      toValue: 0,
+      useNativeDriver: true
     }).start();
   };
 
