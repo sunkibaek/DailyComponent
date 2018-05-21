@@ -13,6 +13,7 @@ type IProps = TextInputProperties & {
 };
 interface IState {
   labelMarginBottom: Animated.Value;
+  text: string;
 }
 
 const styles = StyleSheet.create({
@@ -35,7 +36,8 @@ class LabelTextInput extends Component<IProps, IState> {
     super(props);
 
     this.state = {
-      labelMarginBottom: new Animated.Value(20)
+      labelMarginBottom: new Animated.Value(20),
+      text: ""
     };
   }
 
@@ -49,8 +51,11 @@ class LabelTextInput extends Component<IProps, IState> {
         </Animated.Text>
 
         <TextInput
+          onBlur={this.moveDownLabel}
           onFocus={this.moveUpLabel}
+          onChangeText={this.setText}
           style={[styles.textInput, human.body]}
+          value={this.state.text}
           {...this.props}
         />
       </View>
@@ -62,6 +67,21 @@ class LabelTextInput extends Component<IProps, IState> {
       duration: 300,
       toValue: 0
     }).start();
+  };
+
+  private moveDownLabel = () => {
+    if (this.state.text) {
+      return;
+    }
+
+    Animated.timing(this.state.labelMarginBottom, {
+      duration: 300,
+      toValue: 20
+    }).start();
+  };
+
+  private setText = (text: string) => {
+    this.setState(() => ({ text }));
   };
 }
 
