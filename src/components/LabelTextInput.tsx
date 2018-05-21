@@ -56,6 +56,24 @@ class LabelTextInput extends Component<IProps, IState> {
                     inputRange: [0, 1],
                     outputRange: [0, -20]
                   })
+                },
+                {
+                  translateX: this.state.labelAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, -6]
+                  })
+                },
+                {
+                  scaleX: this.state.labelAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 0.8]
+                  })
+                },
+                {
+                  scaleY: this.state.labelAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 0.8]
+                  })
                 }
               ]
             }
@@ -78,7 +96,7 @@ class LabelTextInput extends Component<IProps, IState> {
 
   private moveUpLabel = () => {
     Animated.timing(this.state.labelAnimation, {
-      duration: 250,
+      duration: 180,
       toValue: 1,
       useNativeDriver: true
     }).start();
@@ -90,7 +108,7 @@ class LabelTextInput extends Component<IProps, IState> {
     }
 
     Animated.timing(this.state.labelAnimation, {
-      duration: 250,
+      duration: 180,
       toValue: 0,
       useNativeDriver: true
     }).start();
